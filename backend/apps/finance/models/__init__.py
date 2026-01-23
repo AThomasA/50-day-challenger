@@ -1,2 +1,2 @@
 from .revenue import Revenue
-#from .expense import Expense
+from .expense import Expense

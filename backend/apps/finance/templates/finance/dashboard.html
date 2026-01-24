@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Finance Dashboard</title>
+</head>
+<body>
+
+<h1>📊 Finance Dashboard</h1>
+
+<form method="get">
+    <label>
+        Start date:
+        <input type="date" name="start_date" value="{{ start_date }}">
+    </label>
+
+    <label>
+        End date:
+        <input type="date" name="end_date" value="{{ end_date }}">
+    </label>
+
+    <button type="submit">Filter</button>
+</form>
+
+<hr>
+
+<h2>Summary</h2>
+
+<p>Total Revenue: R$ {{ revenue.total }}</p>
+<p>Max Revenue: R$ {{ revenue.max }}</p>
+<p>Min Revenue: R$ {{ revenue.min }}</p>
+
+<hr>
+
+<p>Total Expense: R$ {{ expense.total }}</p>
+<p>Max Expense: R$ {{ expense.max }}</p>
+<p>Min Expense: R$ {{ expense.min }}</p>
+
+<hr>
+
+<h2>Balance</h2>
+<p><strong>R$ {{ balance }}</strong></p>
+
+<hr>
+
+<h2>Revenue by Month</h2>
+<ul>
+    {% for item in revenue_by_month %}
+        <li>{{ item.month|date:"m/Y" }} — R$ {{ item.total }}</li>
+    {% empty %}
+        <li>No data</li>
+    {% endfor %}
+</ul>
+
+<hr>
+
+<h2>Expense by Month</h2>
+<ul>
+    {% for item in expense_by_month %}
+        <li>{{ item.month|date:"m/Y" }} — R$ {{ item.total }}</li>
+    {% empty %}
+        <li>No data</li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>

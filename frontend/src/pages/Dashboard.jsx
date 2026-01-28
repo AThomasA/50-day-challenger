@@ -1,9 +1,10 @@
-import React from 'react'
+import Finance from "../components/finance/Finance";
 
-const Dashboard = () => {
+export default function Dashboard() {
   return (
-    <div>Dashboard</div>
-  )
+    <div>
+      <h1>Dashboard Financeiro</h1>
+      <Finance />
+    </div>
+  );
 }
-
-export default Dashboard

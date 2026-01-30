@@ -1,5 +1,5 @@
 import { useFinance } from "../../hooks/useFinance";
-import SummaryForm from "./components/SummaryCard";
+import SummaryCard from "./components/SummaryCard";
 import RevenueForm from "./components/RevenueForm";
 import ExpenseForm from "./components/ExpenseForm";
 
@@ -11,6 +11,7 @@ export default function Finance() {
     endDate,
     setStartDate,
     setEndDate,
+    addRevenue,
   } = useFinance();
 
   return (
@@ -42,7 +43,7 @@ export default function Finance() {
 
       {summary && <SummaryCard data={summary} />}
 
-      <RevenueForm />
+      <RevenueForm onSubmit={addRevenue} />
       <ExpenseForm />
     </>
   );

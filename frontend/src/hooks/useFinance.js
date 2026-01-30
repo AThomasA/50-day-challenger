@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { api } from "../services/api";
+import { useEffect, useState, useCallback } from "react";
+import { api, createRevenue } from "../services/api";
 
 export function useFinance() {
   const [summary, setSummary] = useState(null);
@@ -8,44 +8,49 @@ export function useFinance() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  useEffect(() => {
-    let isMounted = true; // evita setState se desmontar
+  // Função central de carga do dashboard
+  const fetchDashboard = useCallback(async () => {
+    setLoading(true);
 
-    async function loadDashboard() {
-      setLoading(true);
+    try {
+      const params = {};
 
-      try {
-        const params = {};
+      if (startDate) params.start_date = startDate;
+      if (endDate) params.end_date = endDate;
 
-        if (startDate) params.start_date = startDate;
-        if (endDate) params.end_date = endDate;
-
-        const response = await api.get("/dashboard/", { params });
-
-        if (isMounted) {
-          setSummary(response.data);
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
-      }
+      const response = await api.get("/dashboard/", { params });
+      setSummary(response.data);
+    } catch (error) {
+      console.error("Erro ao carregar dashboard", error);
+    } finally {
+      setLoading(false);
     }
-
-    loadDashboard();
-
-    return () => {
-      isMounted = false;
-    };
   }, [startDate, endDate]);
+
+  // Dispara automaticamente ao mudar período
+  useEffect(() => {
+    fetchDashboard();
+  }, [fetchDashboard]);
+
+  // POST Receita
+  const addRevenue = async (data) => {
+    try {
+      await createRevenue(data);
+      await fetchDashboard(); // Recarrega o dashboard após adicionar receita
+    } catch (error) {
+      console.error("Erro ao criar receita", error);
+      throw error;
+    }
+  };
 
   return {
     summary,
     loading,
 
+    addRevenue,
+
     startDate,
     endDate,
-
     setStartDate,
     setEndDate,
   };
